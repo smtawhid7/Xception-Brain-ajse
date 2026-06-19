@@ -12,7 +12,7 @@ cells that reproduce every table and figure reported in the manuscript.
 ## 1. Repository Contents
 
 ```
-repo/
+Xception-Brain-ajse/
 ├── gan-xception-journal-ready.ipynb   # Single notebook with all implementation code
 └── README.md                          # This file
 ```
