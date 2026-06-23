@@ -1,0 +1,46 @@
+# ============================================================
+# Conda environment for
+# "Xception-Based Brain Tumor Classification with GAN
+#  Augmentation and Multi-Technique Explainable AI"
+#
+# Tested stack: Kaggle GPU notebook image (dual NVIDIA Tesla T4),
+# Python 3.12.12, CUDA 12.5, cuDNN 9.3.
+#
+# Create with:   conda env create -f environment.yml
+# Activate with: conda activate gan-xception
+# ============================================================
+name: gan-xception
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12.12
+  - pip=24.2
+  # CUDA runtime for GPU (matches the tested CUDA 12.5 / cuDNN 9.3 stack)
+  - cudatoolkit=12.5
+  - cudnn=9.3
+  - pip:
+      # --- Core deep learning (TensorFlow / Keras path: Xception, DCGAN, InceptionV3) ---
+      - tensorflow==2.18.0          # bundles Keras 3.6
+      # --- PyTorch path (timm baselines: ConvNeXt-Tiny, Swin-Base) ---
+      - torch==2.5.1
+      - torchvision==0.20.1
+      - timm==1.0.11
+      # --- Numerics / ML utilities ---
+      - numpy==1.26.4
+      - pandas==2.2.3
+      - scipy==1.14.1
+      - scikit-learn==1.5.2
+      # --- Image I/O, hashing, SSIM ---
+      - opencv-python==4.10.0.84
+      - scikit-image==0.24.0
+      - Pillow==11.0.0
+      - imagehash==4.3.1            # 64-bit perceptual hash for near-duplicate removal
+      # --- Explainable AI ---
+      - shap==0.46.0
+      - lime==0.2.0.1
+      # --- Plotting ---
+      - matplotlib==3.9.2
+      - seaborn==0.13.2
+      # --- Notebook execution ---
+      - jupyter==1.1.1
