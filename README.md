@@ -5,7 +5,10 @@ This repository contains the complete implementation accompanying the paper
 
 All implementation code is consolidated in a single Jupyter notebook,
 `gan-xception-journal-ready.ipynb`, organised into sequentially-executable
-cells that reproduce every table and figure reported in the manuscript.
+cells. Executing the notebook reproduces the training/evaluation pipeline and
+the reported quantitative results under the documented configuration and the
+tested environment (see Section 3). Exact numerical values may vary slightly
+across hardware, CUDA/cuDNN, and library versions.
 
 ---
 
@@ -81,10 +84,18 @@ The notebook is organised in sequential sections that mirror the manuscript:
 
 ## 3. Software Requirements
 
-The notebook was developed and tested under the following stack. There is
-no `requirements.txt` or `environment.yml` in this repository; the packages
-below should be installed manually (or via `pip install <package>` for each
-line) into a Python 3.8+ environment.
+A pinned `requirements.txt` and a matching `environment.yml` (Conda) are
+provided in this repository. Install with:
+
+```
+pip install -r requirements.txt
+# or
+conda env create -f environment.yml
+```
+
+The table below summarises the role of each package. The notebook was developed
+and tested on the Kaggle GPU image (Python 3.12, dual NVIDIA Tesla T4, CUDA 12.5,
+cuDNN 9.3).
 
 | Package        | Purpose                                          |
 |----------------|--------------------------------------------------|
@@ -137,12 +148,12 @@ The following parameters are set near the top of the notebook. There is no
 external config file:
 
 ```python
-DATASET_PATH      = "<set to your local PMRAM Raw path>"
+DATASET_PATH      = os.environ.get("PMRAM_DATASET_PATH", "<default Kaggle Raw path>")  # configurable via env var
 IMG_SIZE_GAN      = (128, 128)     # DCGAN resolution
 IMG_SIZE_XCEP     = (299, 299)     # Xception input
 LATENT_DIM        = 100            # DCGAN latent dimension
 BATCH_SIZE        = 32
-EPOCHS_GAN        = 2000           # Per-fold DCGAN training
+EPOCHS_GAN        = 1500           # Per-fold DCGAN training
 N_GEN_PER_CLASS   = 300            # Synthetic images per class per fold
 EPOCHS_FE         = 10             # Feature-extraction stage
 EPOCHS_FT         = 20             # Fine-tuning stage
@@ -156,7 +167,7 @@ SEED              = 42             # Global random seed (numpy, tf, torch, pytho
 
 To reproduce all results in the paper:
 
-1. Install the packages listed in Section 3.
+1. Install the pinned dependencies: `pip install -r requirements.txt` (or use `environment.yml`).
 2. Download the PMRAM dataset from Kaggle and set `DATASET_PATH`.
 3. Open `gan-xception-journal-ready.ipynb` in Jupyter.
 4. Execute the cells **top-to-bottom in order**. Each section corresponds to a
@@ -221,7 +232,7 @@ the scope of the distributed reproducibility materials explicit.
 - All figures and tables shown in the manuscript
 
 ### Not provided (with rationale)
-- **`requirements.txt` / `environment.yml`** — not distributed; the dependency list in Section 3 above plus the import cell of the notebook is the authoritative environment specification.
+- **`requirements.txt` / `environment.yml`** — provided with pinned, tested versions (see Section 3). A Dockerfile is not distributed.
 - **Trained model weight files** — not redistributed due to per-fold checkpoint size across seven architectures. The notebook contains the complete code needed to retrain every reported model under the same seeds and splits.
 - **Patient identifiers / raw clinical metadata** — not available in the public PMRAM release; see the limitation note below.
 
